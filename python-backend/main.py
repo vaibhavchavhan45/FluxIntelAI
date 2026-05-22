@@ -37,6 +37,10 @@ app.include_router(ask_query_router)
 app.include_router(status_router)
 app.include_router(share_router)
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 
 @app.on_event("startup")
 async def start_auto_repair():
