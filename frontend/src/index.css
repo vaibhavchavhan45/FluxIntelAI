@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    background-color: #242424;
+  }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888888;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888888 transparent;
+}
+
+input::placeholder {
+  transition: color 0.2s ease;
+}
