@@ -1,0 +1,3 @@
+export const bugInputCls = "w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-red-200 transition-all duration-200 bug-input";
+
+export const feedbackInputCls = "w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-red-200 transition-all duration-200 feedback-input";

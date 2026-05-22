@@ -1,0 +1,14 @@
+.feedback-input:focus::placeholder,
+.bug-input:focus::placeholder {
+  color: #737373;
+}
+
+.feedback-input:focus::-webkit-input-placeholder,
+.bug-input:focus::-webkit-input-placeholder {
+  color: #737373;
+}
+
+.feedback-input:focus::-moz-placeholder,
+.bug-input:focus::-moz-placeholder {
+  color: #737373;
+}
