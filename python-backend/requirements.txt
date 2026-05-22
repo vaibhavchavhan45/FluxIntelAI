@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+python-dotenv
+pydantic
+langchain
+langchain-core
+langchain-openai
+langchain-community
+langchain-voyageai
+langchain-pinecone
+pinecone
+youtube-transcript-api
