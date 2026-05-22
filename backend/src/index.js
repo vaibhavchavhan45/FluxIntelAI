@@ -27,18 +27,6 @@ app.use(passport.initialize())
 
 app.use("/auth", authRoutes)
 
-// app.use("/api/v1/youtube", (req, res, next) => {
-//   authMiddleware(req, res, next);
-// }, queryRoutes)
-
-// app.use("/api/v1/youtube", (req, res, next) => {
-//   authMiddleware(req, res, next);
-// }, videoRoutes)
-
-// app.use("/api/v1/youtube", (req, res, next) => {
-//   if (req.path.startsWith("/shared-chat")) return next();
-//   authMiddleware(req, res, next);
-// }, chatRoutes)
 
 app.use("/api/v1/youtube", (req, res, next) => {
   if (req.path.startsWith("/shared-chat")) return next();
@@ -46,6 +34,8 @@ app.use("/api/v1/youtube", (req, res, next) => {
 }, queryRoutes, videoRoutes, chatRoutes)
 
 createTables()
+
+app.get("/health", (req, res) => res.status(200).json({ status: "ok" }))
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`)
