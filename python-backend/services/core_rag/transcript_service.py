@@ -3,6 +3,9 @@ from youtube_transcript_api import (
     TranscriptsDisabled, 
     NoTranscriptFound
 )
+from config import PROXY_HOST, PROXY_PORT, PROXY_USERNAME, PROXY_PASSWORD
+
+PROXY_URL = f"http://{PROXY_USERNAME}:{PROXY_PASSWORD}@{PROXY_HOST}:{PROXY_PORT}"
 
 def fetch_transcript(videoId: str, languages: str):
     """
@@ -10,7 +13,10 @@ def fetch_transcript(videoId: str, languages: str):
         Returns transcript list.
     """
     try:
-        ytt_transcript = YouTubeTranscriptApi()
+        ytt_transcript = YouTubeTranscriptApi(proxies={
+            "http": PROXY_URL,
+            "https": PROXY_URL
+        })
         all_transcript = ytt_transcript.fetch(videoId, languages = [languages])
         return all_transcript
     
