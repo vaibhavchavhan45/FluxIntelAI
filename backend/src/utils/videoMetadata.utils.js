@@ -1,55 +1,39 @@
 import axios from "axios"
 
+const INVIDIOUS_INSTANCES = [
+    "https://inv.nadeko.net",
+    "https://invidious.nerdvpn.de",
+    "https://invidious.privacyredirect.com",
+    "https://yt.cdaut.de",
+    "https://invidious.io.lol",
+]
+
+
 export async function fetchVideoTitle(videoId) {
-    try {
-        const ytHTMLPage = await axios.get(
-            `https://www.youtube.com/watch?v=${videoId}`,
-            {
-                proxy: {
-                    protocol: process.env.PROXY_PROTOCOL,
-                    host: process.env.PROXY_HOST,
-                    port: Number(process.env.PROXY_PORT),
-                    auth: {
-                        username: process.env.PROXY_USERNAME,
-                        password: process.env.PROXY_PASSWORD
-                    }
-                }
-            }
-        )
+    for (const instance of INVIDIOUS_INSTANCES) {
+        try {
+            const response = await axios.get(
+                `${instance}/api/v1/videos/${videoId}`,
+                { timeout: 10000 }
+            )
 
-        const html = ytHTMLPage.data
-        const captureTitle = html.match(/"title":"(.*?)"/)
+            const rawTitle = response.data?.title || videoId
 
-        const rawTitle = captureTitle?.[1] || videoId
+            let cleaned = rawTitle
+            cleaned = cleaned.split(/[|—]/).shift().trim()
+            cleaned = cleaned.replace(/\[.*?\]/g, '').trim()
+            cleaned = cleaned.replace(/\(.*?\)/g, '').trim()
+            cleaned = cleaned.replace(/[-–]\s*(Lyrical|Lyrics|Official|Full Version|Full Video|Audio|Video|HD|4K|feat|ft|w\/|with|by).*/i, '').trim()
+            cleaned = cleaned.replace(/[:\-–|,]+$/, '').trim()
+            cleaned = cleaned.replace(/\s+/g, ' ').trim()
 
-        let cleaned = rawTitle
+            return cleaned.length > 45 ? cleaned.substring(0, 45).trim() + "..." : cleaned
 
-        // decode unicode escapes like \u0026 → &
-        cleaned = cleaned.replace(/\\u[\dA-Fa-f]{4}/g, (match) =>
-            String.fromCharCode(parseInt(match.replace('\\u', ''), 16))
-        )
-
-        // remove content after | or —
-        cleaned = cleaned.split(/[|—]/).shift().trim()
-
-        // remove content in brackets/parens
-        cleaned = cleaned.replace(/\[.*?\]/g, '').trim()
-        cleaned = cleaned.replace(/\(.*?\)/g, '').trim()
-
-        // remove common suffix keywords
-        cleaned = cleaned.replace(/[-–]\s*(Lyrical|Lyrics|Official|Full Version|Full Video|Audio|Video|HD|4K|feat|ft|w\/|with|by).*/i, '').trim()
-
-        // remove trailing special chars
-        cleaned = cleaned.replace(/[:\-–|,]+$/, '').trim()
-
-        // remove multiple spaces
-        cleaned = cleaned.replace(/\s+/g, ' ').trim()
-
-        // truncate to 45 chars
-        return cleaned.length > 45 ? cleaned.substring(0, 45).trim() + "..." : cleaned
-
-    } catch (e) {
-        console.error("Title fetch failed:", e)
-        return videoId
+        } catch (e) {
+            continue
+        }
     }
+
+    console.error("Title fetch failed from all instances")
+    return videoId
 }

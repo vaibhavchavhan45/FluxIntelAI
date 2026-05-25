@@ -11,4 +11,4 @@ langchain-community
 langchain-voyageai
 langchain-pinecone
 pinecone
-youtube-transcript-api
+httpx
