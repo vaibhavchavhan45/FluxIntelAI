@@ -20,7 +20,6 @@ from services.video_repair.video_repair_scheduler import auto_repair_loop
 Base.metadata.create_all(bind = engine)
 
 app = FastAPI()
-app.middleware("http")(verify_internal_key)
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,6 +28,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.middleware("http")(verify_internal_key)
+
 
 app.include_router(ingest_router)
 app.include_router(history_router)
