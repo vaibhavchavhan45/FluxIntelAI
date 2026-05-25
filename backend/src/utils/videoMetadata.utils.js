@@ -3,7 +3,18 @@ import axios from "axios"
 export async function fetchVideoTitle(videoId) {
     try {
         const ytHTMLPage = await axios.get(
-            `https://www.youtube.com/watch?v=${videoId}`
+            `https://www.youtube.com/watch?v=${videoId}`,
+            {
+                proxy: {
+                    protocol: process.env.PROXY_PROTOCOL,
+                    host: process.env.PROXY_HOST,
+                    port: Number(process.env.PROXY_PORT),
+                    auth: {
+                        username: process.env.PROXY_USERNAME,
+                        password: process.env.PROXY_PASSWORD
+                    }
+                }
+            }
         )
 
         const html = ytHTMLPage.data
